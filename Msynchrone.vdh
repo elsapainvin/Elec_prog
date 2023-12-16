@@ -1,0 +1,32 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+
+
+ENTITY DFF IS
+  GENERIC (Tco : TIME := 0 ns);
+  PORT (D, Clk :  IN STD_LOGIC;
+        Pre, Clr : IN STD_LOGIC;
+        Q, Qn    : OUT STD_LOGIC);
+END ENTITY;
+
+
+ARCHITECTURE Beh OF DFF IS
+  SIGNAL mem : STD_LOGIC;
+BEGIN
+
+  PROCESS (Clk, Pre, Clr) BEGIN
+    IF (Clr='1') THEN
+	  mem <= '0';
+	ELSIF (Pre = '1') THEN 
+	  mem <= '1';
+	ELSIF (Clk'event AND Clk='1') THEN
+	  mem <= D;
+	ELSE
+	  mem <= mem;
+	END IF;
+  END PROCESS;
+
+Q <= mem AFTER Tco;
+Qn <= NOT(mem) AFTER Tco;
+
+END ARCHITECTURE;
